@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 task seed_delivery_services: :environment do
-  C::DeliveryServiceProvider.find_each(&:destroy)
+  C::Delivery::Provider.find_each(&:destroy)
 
   providers = {
     'Courier' => {
       'Standard Delivery' => [
         {
           price: 8,
-          max: 99.99
+          max: 99.99 * 100
         },
         {
           price: 0,
-          min: 100
+          min: 100 * 100
         }
       ]
     },
@@ -26,22 +26,19 @@ task seed_delivery_services: :environment do
   }
 
   providers.each do |provider, services|
-    dsp = C::DeliveryServiceProvider.create!(name: provider)
+    dsp = C::Delivery::Provider.create!(name: provider)
 
-    count = 0
     services.each do |service, prices|
-      ds = dsp.delivery_services.create!(
+      ds = dsp.services.create!(
         name: service,
-        active: true,
-        default: count == 0
+        channel: :web
       )
-      count += 1
 
       prices.each do |price|
-        ds.delivery_service_prices.create!(
-          price: price[:price],
-          min_cart_price: price[:min] || 0,
-          max_cart_price: price[:max]
+        ds.rules.create!(
+          base_price: price[:price],
+          min_cart_price_pennies: price[:min] || 0,
+          max_cart_price_pennies: price[:max]
         )
       end
     end

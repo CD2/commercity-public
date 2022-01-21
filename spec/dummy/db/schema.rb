@@ -206,7 +206,6 @@ ActiveRecord::Schema.define(version: 20211025092454) do
     t.boolean  "abandoned_mailout_seven_day",     default: false
     t.string   "email"
     t.boolean  "prefer_click_and_collect",        default: false, null: false
-    t.boolean  "gift_wrapping",                   default: false, null: false
     t.index ["customer_id"], name: "index_c_carts_on_customer_id", using: :btree
     t.index ["order_id"], name: "index_c_carts_on_order_id", using: :btree
   end
@@ -364,10 +363,10 @@ ActiveRecord::Schema.define(version: 20211025092454) do
   end
 
   create_table "c_customers", force: :cascade do |t|
-    t.string   "email",                     default: "",    null: false
+    t.string   "email",                 default: "",    null: false
     t.datetime "remember_created_at"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.string   "name"
     t.string   "company"
     t.string   "phone"
@@ -376,17 +375,15 @@ ActiveRecord::Schema.define(version: 20211025092454) do
     t.string   "thumbnail"
     t.integer  "channel"
     t.string   "amazon_email"
-    t.boolean  "sparse",                    default: false
+    t.boolean  "sparse",                default: false
     t.integer  "customer_account_id"
     t.string   "sage_ref"
-    t.boolean  "consent_order",             default: false
-    t.boolean  "consent_promotion",         default: false
-    t.boolean  "consent_products",          default: false
-    t.boolean  "consent_contact_post",      default: false
-    t.boolean  "consent_contact_phone",     default: false
-    t.boolean  "consent_contact_email",     default: false
-    t.boolean  "trade_account",             default: false, null: false
-    t.float    "trade_discount_percentage", default: 0.0,   null: false
+    t.boolean  "consent_order",         default: false
+    t.boolean  "consent_promotion",     default: false
+    t.boolean  "consent_products",      default: false
+    t.boolean  "consent_contact_post",  default: false
+    t.boolean  "consent_contact_phone", default: false
+    t.boolean  "consent_contact_email", default: false
     t.index ["customer_account_id"], name: "index_c_customers_on_customer_account_id", using: :btree
     t.index ["email"], name: "index_c_customers_on_email", using: :btree
   end
@@ -748,7 +745,6 @@ ActiveRecord::Schema.define(version: 20211025092454) do
     t.boolean  "tracking_email_sent", default: false
     t.datetime "dispatched_at"
     t.integer  "transaction_suffix",  default: 0,     null: false
-    t.boolean  "gift_wrapping",       default: false, null: false
     t.index ["billing_address_id"], name: "index_c_order_sales_on_billing_address_id", using: :btree
     t.index ["customer_id"], name: "index_c_order_sales_on_customer_id", using: :btree
     t.index ["delivery_id"], name: "index_c_order_sales_on_delivery_id", using: :btree
@@ -1445,13 +1441,12 @@ ActiveRecord::Schema.define(version: 20211025092454) do
     t.boolean  "manually_disabled",              default: false
     t.boolean  "display_only",                   default: false
     t.datetime "myriad_updated_at"
-    t.string   "ebay_product_pipeline_id"
     t.string   "amazon_product_pipeline_id"
+    t.string   "ebay_product_pipeline_id"
     t.jsonb    "amazon_product_pipeline_data",   default: {}
     t.boolean  "should_push_to_amazon_pipeline", default: false
     t.jsonb    "ebay_product_pipeline_data",     default: {}
     t.boolean  "build_from_ebay",                default: false
-    t.integer  "trade_price_id"
     t.boolean  "click_and_collect",              default: false
     t.index ["amazon_price_id"], name: "index_c_product_variants_on_amazon_price_id", using: :btree
     t.index ["amazon_product_pipeline_id"], name: "index_c_product_variants_on_amazon_product_pipeline_id", unique: true, using: :btree
@@ -1461,7 +1456,6 @@ ActiveRecord::Schema.define(version: 20211025092454) do
     t.index ["master_id"], name: "index_c_product_variants_on_master_id", using: :btree
     t.index ["retail_price_id"], name: "index_c_product_variants_on_retail_price_id", using: :btree
     t.index ["sku"], name: "index_c_product_variants_on_sku", unique: true, using: :btree
-    t.index ["trade_price_id"], name: "index_c_product_variants_on_trade_price_id", using: :btree
     t.index ["web_price_id"], name: "index_c_product_variants_on_web_price_id", using: :btree
   end
 
@@ -1484,7 +1478,6 @@ ActiveRecord::Schema.define(version: 20211025092454) do
     t.boolean  "restricted_brand",             default: false, null: false
     t.decimal  "per_item_discount_multiplier", default: "1.0"
     t.integer  "uses",                         default: 0
-    t.integer  "use_limit"
     t.integer  "times_used",                   default: 0
     t.boolean  "restricted_category",          default: false, null: false
     t.index ["code"], name: "index_c_product_vouchers_on_code", using: :btree
@@ -1755,6 +1748,5 @@ ActiveRecord::Schema.define(version: 20211025092454) do
   add_foreign_key "c_product_variant_vouchers", "c_product_variants", column: "variant_id"
   add_foreign_key "c_product_variant_vouchers", "c_product_vouchers", column: "voucher_id"
   add_foreign_key "c_product_variants", "c_countries", column: "country_of_manufacture_id", on_delete: :restrict
-  add_foreign_key "c_product_variants", "c_prices", column: "trade_price_id"
   add_foreign_key "c_product_variants", "c_product_masters", column: "master_id", on_delete: :cascade
 end
