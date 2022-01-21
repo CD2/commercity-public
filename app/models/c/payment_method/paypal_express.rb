@@ -43,14 +43,14 @@ module C
         country_from_paypal = C::Country.find_by(iso2: country_code_from_paypal)
         country_from_checkout = payment.order.shipping_address.country
 
-        if Rails.env.development?
-          byebug
-        end
 
         if country_from_paypal.present? && country_from_checkout.present?
           pp_iso2 = country_from_paypal.iso2
           co_iso2 = country_from_checkout.iso2
 
+          # Because some people want to have England/Wales/NI/Scotland as separate countries, they are stored with fake iso2's of GB_
+          # Paypal only supports real ones so they discard the shipping address if it's not valid
+          # so here, we check if it has the hack prefix and then send up GB which will we will check here if it's just a GB country
           if co_iso2.include?("GB_")
             co_iso2 = "GB"
           end

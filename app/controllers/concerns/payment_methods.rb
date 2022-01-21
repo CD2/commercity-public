@@ -333,6 +333,9 @@ module PaymentMethods
   def express_payment
     iso2 = @cart.shipping_address.country.iso2
 
+    # Because some people want to have England/Wales/NI/Scotland as separate countries, they are stored with fake iso2's of GB_
+    # Paypal only supports real ones so they discard the shipping address if it's not valid
+    # so here, we check if it has the hack prefix and then send up GB which will we will check on the other side
     if iso2.include?("GB_")
       iso2 = "GB"
     end
