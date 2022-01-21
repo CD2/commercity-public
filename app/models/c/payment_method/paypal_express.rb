@@ -47,9 +47,20 @@ module C
           byebug
         end
 
-        if country_from_paypal == country_from_checkout
-          copy_address_from_paypal(params)
-          true
+        if country_from_paypal.present? && country_from_checkout.present?
+          pp_iso2 = country_from_paypal.iso2
+          co_iso2 = country_from_checkout.iso2
+
+          if co_iso2.include?("GB_")
+            co_iso2 = "GB"
+          end
+
+          if pp_iso2 == co_iso2
+            copy_address_from_paypal(params)
+            true
+          else
+            false
+          end
         else
           false
         end

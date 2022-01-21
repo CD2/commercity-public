@@ -331,6 +331,12 @@ module PaymentMethods
   # ##############################
 
   def express_payment
+    iso2 = @cart.shipping_address.country.iso2
+
+    if iso2.include?("GB_")
+      iso2 = "GB"
+    end
+
     response = C::EXPRESS_GATEWAY.setup_purchase(
       @cart.price.fractional,
       ip: request.remote_ip,
@@ -348,7 +354,7 @@ module PaymentMethods
         city: @cart.shipping_address.city,
         state: @cart.shipping_address.region,
         zip: @cart.shipping_address.postcode,
-        country:  @cart.shipping_address.country.iso2,
+        country: iso2,
         phone: @cart.shipping_address.phone, 
       },
     )
