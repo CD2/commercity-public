@@ -43,6 +43,10 @@ module C
         country_from_paypal = C::Country.find_by(iso2: country_code_from_paypal)
         country_from_checkout = payment.order.shipping_address.country
 
+        if Rails.env.development?
+          byebug
+        end
+
         if country_from_paypal == country_from_checkout
           copy_address_from_paypal(params)
           true
