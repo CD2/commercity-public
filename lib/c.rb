@@ -17,6 +17,9 @@ module C
 
     mattr_accessor :domain_name
     self.domain_name = 'example.com'
+    
+    mattr_accessor :email_from
+    self.domain_name = 'notifications@mailer.com'
 
     mattr_accessor :cart_name
     self.cart_name = 'cart'
